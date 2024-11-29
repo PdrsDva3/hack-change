@@ -1,0 +1,42 @@
+version: '3.12.3'
+
+services:
+  db:
+    image: postgres:13
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: setq
+      POSTGRES_PASSWORD: sve4kasetq
+      POSTGRES_DB: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+
+  backend:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432/postgres
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+  frontend:
+    build: ./frontend
+    expose: [ 3000 ]
+    restart: unless-stopped
+    init: true
+    env_file:
+      - ./frontend/.env
+    ports:
+      - 443:443
+      - 80:80
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  caddy_data:
+  caddy_config:
+  pgdata:
+  static:
