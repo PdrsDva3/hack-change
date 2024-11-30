@@ -62,3 +62,26 @@ async def create_meme(file_name, meme):
         if connection:
             cursor.close()
             connection.close()
+
+async def get_all_memes():
+    connection = db_connection()
+    cursor = connection.cursor()
+
+    try:
+        query = sql.SQL("""
+        SELECT id, name, meme FROM memes; 
+        """)
+        cursor.execute(query, )
+
+        rows = cursor.fetchall()
+        memes = [{"id": row[0], "name": row[1], "meme": row[2]}
+            for row in rows]
+
+        return memes
+
+    except (Exception, psycopg2.DatabaseError) as error:
+        pass
+    finally:
+        if connection:
+            cursor.close()
+            connection.close()
