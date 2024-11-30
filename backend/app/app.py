@@ -1,4 +1,6 @@
 """Само приложение"""
+import time
+
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from pathlib import Path
 import shutil
@@ -23,7 +25,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 import app.coordinates as coordinates
-import app.taxist as taxi
+import app.route_optimizer as ta
 
 app = FastAPI()
 
@@ -108,17 +110,16 @@ async def get_memes_h():
 
 app.include_router(meme_router, prefix="/meme", tags=["meme"])
 
-class ItemRequest(BaseModel):
-    first: Any
-    second: Any
-
-    class Config:
-        arbitrary_types_allowed = True
-
 
 @app.post("/tax/see")
-async def see(item: ItemRequest):
-    out = taxi.data(item.first, item.second)
+async def see():
+    demand = ta.get_demand()
+    ta.assign_routes()  # Планируем маршруты
+    for taxi in ta.taxis:
+        ta.follow_route(taxi)  # Выполняем маршруты
+    # add_new_passageres()
+    time.sleep(3)  # Повторяем каждые 10 секунд
+    out = ta.data(1, 3)
     pp = {
         "tax": out[0],
         "time_1": out[1],

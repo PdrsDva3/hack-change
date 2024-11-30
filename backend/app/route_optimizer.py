@@ -124,10 +124,3 @@ def data(first, second):
 
 
 
-while True:
-    demand = get_demand()
-    assign_routes()  # Планируем маршруты
-    for taxi in taxis:
-        follow_route(taxi)  # Выполняем маршруты
-    # add_new_passageres()
-    time.sleep(3)  # Повторяем каждые 10 секунд
