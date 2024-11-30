@@ -54,4 +54,3 @@ app.include_router(dots_router, prefix="/dot", tags=["dot"])
 async def create_meme_h(file: UploadFile):
     meme = base64.b64encode(file.file.read())
     await create_meme(file.filename, meme)
-    return "üraaaa goool"
