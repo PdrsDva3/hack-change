@@ -46,6 +46,12 @@ CREATE TABLE IF NOT EXISTS orders
     in_id int,
     ts timestamp
 );
+
+Create table if not exists lines(
+    id serial not null primary key,
+    file_name varchar,
+    coord jsonb
+);
         
 """)
 
@@ -73,9 +79,6 @@ def migration_down():
         if conn:
             cur.close()
             conn.close()
-
-
-
 
 
 if __name__ == "__main__":
