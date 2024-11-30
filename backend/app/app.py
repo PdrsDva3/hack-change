@@ -2,6 +2,9 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from pathlib import Path
 import shutil
+
+from fastapi.middleware.cors import CORSMiddleware
+
 import app.coordinates as coordinates
 import base64
 
@@ -40,6 +43,36 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+origins = [
+    "http://localhost.tiangolo.com",
+    "https://localhost.tiangolo.com",
+    "http://localhost",
+    "http://localhost:8080",
+    "http://localhost:5173",
+    "http://localhost:5174",
+    "http://localhost:4173",
+    "http://localhost:3000",
+    "https://localhost:8000",
+    "https://localhost:5173",
+    "https://localhost:5174",
+    "https://localhost:4173",
+    "http://garbagegogoriki.ru",
+    "http://garbagegogoriki.ru/api",
+    "http://garbagegogoriki.ru/",
+    "https://garbagegogoriki.ru",
+    "https://garbagegogoriki.ru/api",
+    "https://garbagegogoriki.ru/",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 @app.post("/file/upload-bytes")
 async def upload_file_bytes(file_bytes: bytes = File()):

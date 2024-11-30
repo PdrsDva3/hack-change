@@ -13,6 +13,8 @@ db_config = {
     'port': config.DB_PORT,
 }
 
+async def add_route(filepath):
+
 def db_connection():
     return psycopg2.connect(**db_config)
 
