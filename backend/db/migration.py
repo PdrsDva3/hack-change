@@ -47,6 +47,13 @@ CREATE TABLE IF NOT EXISTS orders
     ts timestamp
 );
 
+CREATE TABLE IF NOT EXISTS memes
+(
+    id serial not null primary key,
+    name varchar,
+    meme varchar
+);
+
 Create table if not exists lines(
     id serial not null primary key,
     file_name varchar,
