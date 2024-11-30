@@ -14,7 +14,7 @@ from fastapi import APIRouter, FastAPI, HTTPException, UploadFile
 
 from fastapi.middleware.cors import CORSMiddleware
 from db.db import get_all_dots, create_meme, get_all_memes
-from db.db import get_all_dots, create_meme
+from db.db import get_all_dots, create_meme, add_order
 from typing import Dict, Any
 
 from fastapi import FastAPI, File, UploadFile, HTTPException
@@ -28,7 +28,6 @@ import app.coordinates as coordinates
 import app.route_optimizer as ta
 
 app = FastAPI()
-
 
 origins = [
     "http://localhost.tiangolo.com",
@@ -62,7 +61,8 @@ app.add_middleware(
 
 @app.post("/file/upload-bytes")
 async def upload_file_bytes(file_bytes: bytes = File()):
-  return {'file_bytes': str(file_bytes)}
+    return {'file_bytes': str(file_bytes)}
+
 
 @app.post("/file/upload-file")
 async def upload_file(file: UploadFile):
@@ -81,9 +81,8 @@ async def upload_file(file: UploadFile):
     return {file.filename: file_path}
 
 
-
-
 dots_router = APIRouter()
+
 
 @dots_router.get("/all")
 async def get_all_dots_h():
@@ -92,14 +91,17 @@ async def get_all_dots_h():
         raise HTTPException(status_code=418, detail="i am a teapot ;)")
     return all_points
 
+
 app.include_router(dots_router, prefix="/dot", tags=["dot"])
 
-
 meme_router = APIRouter()
+
+
 @meme_router.post("create")
 async def create_meme_h(file: UploadFile):
     meme = base64.b64encode(file.file.read())
     await create_meme(file.filename, meme)
+
 
 @meme_router.get("/all")
 async def get_memes_h():
@@ -107,6 +109,7 @@ async def get_memes_h():
     if not all_memes:
         raise HTTPException(status_code=418, detail="i am a teapot ;)")
     return all_memes
+
 
 app.include_router(meme_router, prefix="/meme", tags=["meme"])
 
@@ -119,6 +122,26 @@ async def see():
         ta.follow_route(taxi)  # Выполняем маршруты
     # add_new_passageres()
     time.sleep(3)  # Повторяем каждые 10 секунд
+    out = ta.data(1, 3)
+    pp = {
+        "tax": out[0],
+        "time_1": out[1],
+        "time_2": out[2],
+        "price": out[3],
+        "cap_1": out[4],
+        "cap_2": out[5]
+    }
+    return pp
+
+
+@app.post("/tax/give")
+async def see():
+    await add_order(1, 3)
+    demand = ta.get_demand()
+    ta.assign_routes()  # Планируем маршруты
+    for taxi in ta.taxis:
+        ta.follow_route(taxi)  # Выполняем маршруты
+    # add_new_passageres()
     out = ta.data(1, 3)
     pp = {
         "tax": out[0],

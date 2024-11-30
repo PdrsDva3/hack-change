@@ -1,3 +1,5 @@
+import time
+from datetime import datetime
 
 import psycopg2
 from psycopg2 import sql
@@ -55,7 +57,7 @@ def get_orders_from(from_id):
     connection = db_connection()
     cursor = connection.cursor()
     try:
-        query = sql.SQL("""SELECT count(*) FROM orders where from_id = &1;
+        query = sql.SQL("""SELECT count(*) FROM orders where from_id = %s;
         """)
         cursor.execute(query, (from_id,))
         row = cursor.fetchone()
@@ -117,6 +119,25 @@ def delete_order(order_id):
         if connection:
             cursor.close()
             connection.close()
+
+
+async def add_order(from_id, in_id):
+    connection = db_connection()
+    cursor = connection.cursor()
+    try:
+        query = sql.SQL("""
+            INSERT into orders (from_id, in_id, ts) VALUES (%s, %s, %s); 
+            """)
+        cursor.execute(query, (from_id, in_id, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), ))
+        connection.commit()
+
+    except (Exception, psycopg2.DatabaseError) as error:
+        return error
+    finally:
+        if connection:
+            cursor.close()
+            connection.close()
+
 
 
 async def add_route(filepath):

@@ -41,7 +41,9 @@ def calculate_priorities():
             if count > 0:
                 # Приоритет учитывает количество ожидающих и удаленность
                 priority = count / (1 + min(abs(to_point - from_point),
-                                            abs(MAX - to_point + from_point)))  # Ближе — выше приоритет
+                                            abs(MAX - to_point + from_point)))
+                if to_point % 7 ==0:
+                    priority +=  1# Ближе — выше приоритет
                 priorities.append((from_point, to_point, ids, priority))
     return sorted(priorities, key=lambda x: x[3], reverse=True)
 
