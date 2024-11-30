@@ -12,6 +12,18 @@ from fastapi import APIRouter, FastAPI, HTTPException, UploadFile
 
 from fastapi.middleware.cors import CORSMiddleware
 from db.db import get_all_dots, create_meme, get_all_memes
+from db.db import get_all_dots, create_meme
+from typing import Dict, Any
+
+from fastapi import FastAPI, File, UploadFile, HTTPException
+from pathlib import Path
+import shutil
+
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+
+import app.coordinates as coordinates
+import app.taxist as taxi
 
 app = FastAPI()
 
@@ -94,6 +106,9 @@ async def upload_file(file: UploadFile):
 
     return {file.filename: file_path}
 
+
+
+
 dots_router = APIRouter()
 
 @dots_router.get("/all")
@@ -120,3 +135,15 @@ async def get_memes_h():
     return all_memes
 
 app.include_router(meme_router, prefix="/meme", tags=["meme"])
+
+class ItemRequest(BaseModel):
+    first: Any
+    second: Any
+
+    class Config:
+        arbitrary_types_allowed = True
+
+
+@app.post("/tax/see")
+async def see(item: ItemRequest):
+    out = taxi.data(item.first, item.second)
