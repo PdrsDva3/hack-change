@@ -114,7 +114,7 @@ app.include_router(meme_router, prefix="/meme", tags=["meme"])
 @app.post("/tax/see")
 async def see():
     demand = ta.get_demand()
-    ta.assign_routes()  # Планируем маршруты
+    ta.assign_routes(demand)  # Планируем маршруты
     for taxi in ta.taxis:
         ta.follow_route(taxi)  # Выполняем маршруты
     # add_new_passageres()

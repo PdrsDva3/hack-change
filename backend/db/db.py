@@ -55,7 +55,7 @@ def get_orders_from(from_id):
     connection = db_connection()
     cursor = connection.cursor()
     try:
-        query = sql.SQL("""SELECT count(*) FROM orders where from_id = &1;
+        query = sql.SQL("""SELECT count(*) FROM orders where from_id = %s;
         """)
         cursor.execute(query, (from_id,))
         row = cursor.fetchone()
@@ -119,8 +119,8 @@ def delete_order(order_id):
             connection.close()
 
 
-async def add_route(filepath):
-    pass
+# async def add_route(filepath):
+#     pass
 
 async def get_all_dots():
     connection = db_connection()

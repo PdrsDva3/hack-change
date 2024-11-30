@@ -47,7 +47,8 @@ def calculate_priorities():
 
 
 # Распределение маршрутов для такси
-def assign_routes():
+def assign_routes(d):
+    demand = d
     for taxi in taxis:
         remaining_capacity = taxi['capacity'] - len(taxi['passengers'])
         current_position = taxi['position']
