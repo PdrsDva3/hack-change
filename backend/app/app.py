@@ -4,7 +4,8 @@ import base64
 from fastapi import APIRouter, FastAPI, HTTPException, UploadFile
 
 from fastapi.middleware.cors import CORSMiddleware
-from db.db import get_all_dots
+from db.db import get_all_dots, create_meme
+
 
 app = FastAPI()
 
@@ -50,7 +51,7 @@ app.include_router(dots_router, prefix="/dot", tags=["dot"])
 
 
 @app.post("/meme/create")
-async def create_meme(file: UploadFile):
+async def create_meme_h(file: UploadFile):
     meme = base64.b64encode(file.file.read())
     await create_meme(file.filename, meme)
     return "üraaaa goool"
