@@ -3,7 +3,7 @@ import random
 import time
 
 import db.db
-import taxist
+
 
 MAX = 9
 demand = dict()
@@ -101,7 +101,7 @@ def add_new_passageres():
 
 
 def data(first, second):
-    orders = int(get_orders_from(first)[0] / 40 * 100)
+    orders = int(db.db.get_orders_from(first)[0] / 40 * 100)
     var = taxis[:]
     tax = len(var)
 
@@ -120,54 +120,13 @@ def data(first, second):
     time_2 = 6
     price = 120
 
-    return orders, time_1, time_2, price, out, tax
+    return tax, time_1, time_2, price, orders, out
 
-
-import psycopg2
-from psycopg2 import sql
-from uvicorn import logging
-
-import psycopg2
-from psycopg2 import sql
-
-import config
-
-db_config = {
-    'dbname': config.DB_NAME,
-    'user': config.DB_USER,
-    'password': config.DB_PASSWORD,
-    'host': config.DB_HOST,
-    'port': config.DB_PORT,
-}
-
-
-def db_connection():
-    return psycopg2.connect(**db_config)
-
-
-def get_orders_from(from_id):
-    connection = db_connection()
-    cursor = connection.cursor()
-    try:
-        query = sql.SQL("""SELECT count(*) FROM orders where from_id = %s;
-        """)
-        cursor.execute(query, (from_id,))
-        row = cursor.fetchone()
-        return row
-
-    except (Exception, psycopg2.DatabaseError) as error:
-        pass
-    finally:
-        if connection:
-            cursor.close()
-            connection.close()
 
 
 while True:
     demand = get_demand()
     assign_routes()  # Планируем маршруты
-    print(taxis)
-    print(data(1, 2))
     for taxi in taxis:
         follow_route(taxi)  # Выполняем маршруты
     # add_new_passageres()

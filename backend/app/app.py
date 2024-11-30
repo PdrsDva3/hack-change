@@ -27,34 +27,6 @@ import app.taxist as taxi
 
 app = FastAPI()
 
-origins = [
-    "http://localhost.tiangolo.com",
-    "https://localhost.tiangolo.com",
-    "http://localhost",
-    "http://localhost:8080",
-    "http://localhost:5173",
-    "http://localhost:5174",
-    "http://localhost:4173",
-    "http://localhost:3000",
-    "https://localhost:8000",
-    "https://localhost:5173",
-    "https://localhost:5174",
-    "https://localhost:4173",
-    "http://garbagegogoriki.ru",
-    "http://garbagegogoriki.ru/api",
-    "http://garbagegogoriki.ru/",
-    "https://garbagegogoriki.ru",
-    "https://garbagegogoriki.ru/api",
-    "https://garbagegogoriki.ru/",
-]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 origins = [
     "http://localhost.tiangolo.com",
@@ -147,3 +119,12 @@ class ItemRequest(BaseModel):
 @app.post("/tax/see")
 async def see(item: ItemRequest):
     out = taxi.data(item.first, item.second)
+    pp = {
+        "tax": out[0],
+        "time_1": out[1],
+        "time_2": out[2],
+        "price": out[3],
+        "cap_1": out[4],
+        "cap_2": out[5]
+    }
+    return pp
