@@ -1,3 +1,4 @@
+import json
 import time
 from datetime import datetime
 
@@ -140,8 +141,51 @@ async def add_order(from_id, in_id):
 
 
 
-async def add_route(filepath):
-    pass
+async def add_route(filename, arr):
+    connection = db_connection()
+    cursor = connection.cursor()
+
+    jeyson = json.dumps(arr)
+
+    try:
+        query = sql.SQL("""
+                INSERT INTO lines (file_name, coord) VALUES (%s, %s::jsonb); 
+            """)
+
+        cursor.execute(query, (filename, jeyson, ))
+        connection.commit()
+
+    except (Exception, psycopg2.DatabaseError) as error:
+        return error
+    finally:
+        if connection:
+            cursor.close()
+            connection.close()
+
+
+async def get_all_routes():
+    connection = db_connection()
+    cursor = connection.cursor()
+
+    try:
+        query = sql.SQL("""
+        SELECT file_name, coord FROM lines; 
+        """)
+        cursor.execute(query, )
+
+        rows = cursor.fetchall()
+        lines = [{"filename": row[0], "coordinates": row[1]} for row in rows]
+
+        return lines
+
+    except (Exception, psycopg2.DatabaseError) as error:
+        return error
+    finally:
+        if connection:
+            cursor.close()
+            connection.close()
+
+
 
 async def get_all_dots():
     connection = db_connection()

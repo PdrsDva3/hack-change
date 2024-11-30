@@ -12,6 +12,6 @@ def coord(file_path):
 
     # Печатаем значение тега <name>
     if name_element is not None:
-        return [[elem.split(',')[1]+"N", elem.split(',')[0]+"E" ]for elem in ["".join(elem.split(",0")) for elem in name_element.text.split()]]
+        return [[elem.split(',')[1], elem.split(',')[0]]for elem in ["".join(elem.split(",0")) for elem in name_element.text.split()]]
     else:
         return []

@@ -1,6 +1,9 @@
 """Само приложение"""
+import os
+import random
 import time
 
+from cloudinit.netinfo import route_info
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from pathlib import Path
 import shutil
@@ -13,7 +16,7 @@ import base64
 from fastapi import APIRouter, FastAPI, HTTPException, UploadFile
 
 from fastapi.middleware.cors import CORSMiddleware
-from db.db import get_all_dots, create_meme, get_all_memes
+from db.db import get_all_dots, create_meme, get_all_memes, get_all_routes, add_route
 from db.db import get_all_dots, create_meme, add_order
 from typing import Dict, Any
 
@@ -58,14 +61,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# можно загружать файл как набор байтов
+# @app.post("/file/upload-bytes")
+# async def upload_file_bytes(file_bytes: bytes = File()):
+#     return {'file_bytes': str(file_bytes)}
 
-@app.post("/file/upload-bytes")
-async def upload_file_bytes(file_bytes: bytes = File()):
-    return {'file_bytes': str(file_bytes)}
-
-
-@app.post("/file/upload-file")
-async def upload_file(file: UploadFile):
+line_router = APIRouter()
+@line_router.post("/add_line")
+async def add_line(file: UploadFile):
     save_directory = Path("./uploaded_files")
     save_directory.mkdir(parents=True, exist_ok=True)
 
@@ -74,12 +77,25 @@ async def upload_file(file: UploadFile):
     with file_path.open("wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
 
-    # arr = coordinates.coord(file_path)
-    # if not arr:
-    #     raise HTTPException(status_code=418, detail="i am a teapot ;)")
+    arr = coordinates.coord(file_path)
+    if not arr:
+        raise HTTPException(status_code=418, detail="i am a teapot ;)")
 
-    return {file.filename: file_path}
+    await add_route(file.filename, arr)
 
+    os.remove(file_path)
+
+    return "line was added"
+
+@line_router.get("/all")
+async def get_all_lines():
+    all_lines = await get_all_routes()
+    if not all_lines:
+        raise HTTPException(status_code=418, detail="you have no lines")
+
+    return all_lines
+
+app.include_router(line_router, prefix="/line", tags=["line"])
 
 dots_router = APIRouter()
 
@@ -96,25 +112,27 @@ app.include_router(dots_router, prefix="/dot", tags=["dot"])
 
 meme_router = APIRouter()
 
-
-@meme_router.post("create")
+@meme_router.post("/create")
 async def create_meme_h(file: UploadFile):
     meme = base64.b64encode(file.file.read())
     await create_meme(file.filename, meme)
+    return "meme was created =)"
 
 
-@meme_router.get("/all")
+@meme_router.get("/random")
 async def get_memes_h():
     all_memes = await get_all_memes()
     if not all_memes:
         raise HTTPException(status_code=418, detail="i am a teapot ;)")
-    return all_memes
+
+    random_meme = random.choice(all_memes)
+    return random_meme
 
 
 app.include_router(meme_router, prefix="/meme", tags=["meme"])
 
-
-@app.post("/tax/see")
+tax_routers = APIRouter()
+@tax_routers.post("/see")
 async def see():
     demand = ta.get_demand()
     ta.assign_routes(demand)  # Планируем маршруты
@@ -134,7 +152,7 @@ async def see():
     return pp
 
 
-@app.post("/tax/give")
+@tax_routers.post("/give")
 async def see():
     await add_order(1, 3)
     demand = ta.get_demand()
@@ -152,3 +170,5 @@ async def see():
         "cap_2": out[5]
     }
     return pp
+
+app.include_router(tax_routers, prefix="/tax", tags=["tax"])
