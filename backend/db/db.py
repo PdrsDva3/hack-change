@@ -7,4 +7,3 @@ db_config = {
     'host': config.DB_HOST,
     'port': config.DB_PORT,
 }
-
