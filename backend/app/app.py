@@ -114,7 +114,8 @@ meme_router = APIRouter()
 
 @meme_router.post("/create")
 async def create_meme_h(file: UploadFile):
-    meme = base64.b64encode(file.file.read())
+    meme = await file.read()
+    meme = base64.b64encode(meme).decode("utf-8")
     await create_meme(file.filename, meme)
     return "meme was created =)"
 
