@@ -23,7 +23,7 @@ def migration_up():
     conn = db_connection()
     cur = conn.cursor()
     try:
-        create = sql.SQL("""CREATE TABLE IF NOT EXISTS dot
+        create = sql.SQL("""CREATE TABLE IF NOT EXISTS dots
 (
     id     serial not null primary key,
     name varchar,
@@ -89,5 +89,5 @@ def migration_down():
 
 
 if __name__ == "__main__":
-    migration_down()
+    # migration_down()
     migration_up()
