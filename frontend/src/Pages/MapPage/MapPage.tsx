@@ -16,7 +16,7 @@ export const Map: React.FC<MapProps> = ({ apiKey }) => {
 		let map: CustomMap | null = null;
 		load().then((mapglAPI) => {
 			map = new mapglAPI.Map('map-container', {
-				center: [55.31878, 25.23584],
+				center: [37.617627, 55.755829],
 				zoom: 13,
 				key: apiKey,
 			});
@@ -27,7 +27,7 @@ export const Map: React.FC<MapProps> = ({ apiKey }) => {
 				map.destroy();
 			}
 		};
-	}, []);
+	},);
 
-	return <div id="map-container"></div>;
+	return <div id="map-container" style={{height:'800px'}}></div>;
 };

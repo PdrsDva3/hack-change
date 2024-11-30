@@ -1,7 +1,7 @@
-*,
+ *,
 ::before,
 ::after {
-	box-sizing: border-box;
+	/* box-sizing: border-box; */
 	margin: 0;
 	padding: 0;
 }
@@ -58,11 +58,9 @@ select,
 button {
 	font: inherit;
 }
-
 html {
 	height: 100%;
 }
-
 html,
 :has(:target) {
 	scroll-behavior: smooth;
@@ -74,7 +72,7 @@ body {
 	line-height: 1.5;
 }
 
-svg *[fill] {
+/* svg *[fill] {
 	fill: currentColor;
 }
 svg *[stroke] {
@@ -83,7 +81,7 @@ svg *[stroke] {
 
 svg * {
 	transition-property: fill, stroke;
-}
+} */
 
 @media (prefers-reduced-motion: reduce) {
 	*,

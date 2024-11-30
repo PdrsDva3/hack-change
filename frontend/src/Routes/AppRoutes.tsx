@@ -3,11 +3,12 @@ import { MainPage } from '../Pages/MainPage/MainPage';
 import { RootLayout } from '../Pages';
 
 export const AppRoutes = () => {
-	return (
+	return(
 		<Routes>
-			<Route path="/" element={<RootLayout />}>
-				<Route index element={<MainPage />} />
+			<Route path='/' element={<RootLayout/>}>
+				<Route index element={<MainPage/>}/>
+
 			</Route>
 		</Routes>
-	);
-};
+	)
+}

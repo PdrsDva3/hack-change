@@ -1,5 +1,5 @@
-import { Dropdown, Menu, Space, Typography } from 'antd';
-import { FC } from 'react';
+import { Button, Dropdown, Menu, Space, Typography } from 'antd';
+import { FC, useEffect, useState } from 'react';
 import Logo from '../../../../assets/svg/logo.svg?react';
 import BigArrowDown from '../../../../assets/svg/big_arrow_down.svg?react';
 import SmallUser from '../../../../assets/svg/small_user.svg?react';
@@ -8,16 +8,42 @@ import { Header } from 'antd/es/layout/layout';
 import MenuItem from 'antd/es/menu/MenuItem';
 import Settings from '../../../../assets/svg/settings.svg?react';
 import Logout from '../../../../assets/svg/logout.svg?react';
+import { api } from '../../../../api/api';
 
 const { Title } = Typography;
 
-export const MainHeader: FC = () => {
-	const MenuItemsStops = (
-		<Menu>
-			<MenuItem key="1">Суверный</MenuItem>
-			<MenuItem key="2">Суверный</MenuItem>
-		</Menu>
-	);
+interface Stop  {
+	stopName: string;
+	id: string;
+	cordinate:number[];
+}
+
+
+export const MainHeader:FC = () => {
+	const [stops, setStops] = useState<Stop[]>([]);
+
+
+  useEffect(() => {
+    const fetchStops = async () => {
+      try {
+        const response = await api.get('', {});
+        const data = response.data;
+        setStops(data);
+      } catch (error) {
+        console.error('Error fetching stops:', error);
+      }
+    };
+
+    fetchStops();
+  }, []);
+
+  const formatStopData = (stops: Stop[]) => (
+    stops.map(stop => ({
+      key: stop.id,
+      label: `${stop.stopName} (${stop.cordinate.join(', ')})`,
+      coordinate: stop.cordinate || [],
+    }))
+  );
 
 	const MenuItems = (
 		<Menu>
@@ -28,7 +54,7 @@ export const MainHeader: FC = () => {
 
 	const MenuItemsUser = (
 		<Menu>
-			<MenuItem disabled key="1">
+			<MenuItem  key="1">
 				<Space style={{ display: 'flex', flexDirection: 'column' }}>
 					<BigUser />
 					<Title style={{ fontSize: '22px', color: '#353535', fontFamily: 'Acrom' }}>
@@ -84,12 +110,14 @@ export const MainHeader: FC = () => {
 				backgroundColor: 'white',
 				borderRadius: '20px',
 				justifyContent: 'space-between',
-				width: '1000px',
+				width: '980px',
 				boxShadow: '5px 5px 15px rgba(0, 0, 0, 0.16)',
 			}}
 		>
 			<Space style={{ paddingTop: '15px' }}>
-				<Logo />
+				<Button type='link'>
+					<Logo />
+				</Button>
 			</Space>
 			<Space style={{ gap: '80px' }}>
 				<Dropdown overlay={MenuItems} trigger={['click']}>
@@ -105,12 +133,13 @@ export const MainHeader: FC = () => {
 							<Title color="353535" style={{ fontSize: '16px', fontFamily: 'Acrom' }}>
 								Пользователям
 							</Title>
-							<BigArrowDown style={{ paddingTop: '35px' }} />
+							<BigArrowDown  />
 						</Space>
 					</a>
 				</Dropdown>
 
-				<Dropdown overlay={MenuItems} trigger={['click']}>
+				<Dropdown
+					overlay={MenuItems} trigger={['click']}>
 					<a onClick={(e) => e.preventDefault()}>
 						<Space
 							style={{
@@ -123,12 +152,12 @@ export const MainHeader: FC = () => {
 							<Title color="353535" style={{ fontSize: '16px', fontFamily: 'Acrom' }}>
 								Водителям
 							</Title>
-							<BigArrowDown color="353535" style={{ paddingTop: '35px' }} />
+							<BigArrowDown color="353535"  />
 						</Space>
 					</a>
 				</Dropdown>
 
-				<Dropdown overlay={MenuItemsStops} trigger={['click']}>
+				<Dropdown overlay={<Menu items={formatStopData(stops)} />}>
 					<a onClick={(e) => e.preventDefault()}>
 						<Space
 							style={{
@@ -141,7 +170,7 @@ export const MainHeader: FC = () => {
 							<Title color="353535" style={{ fontSize: '16px', fontFamily: 'Acrom' }}>
 								Причалы
 							</Title>
-							<BigArrowDown color="353535" style={{ paddingTop: '35px' }} />
+							<BigArrowDown color="353535"  />
 						</Space>
 					</a>
 				</Dropdown>
