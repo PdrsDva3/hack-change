@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "format": "prettier --write ./src"
+    "format": "prettier --write ./src",
+		"codegen": "npx openapi-typescript-codegen --input .\\src\\assets\\swagger.codegen.json --output .\\src\\api\\"
   },
   "dependencies": {
     "@2gis/mapgl": "^1.53.0",

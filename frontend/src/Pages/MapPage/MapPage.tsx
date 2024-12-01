@@ -27,7 +27,7 @@ export const Map: React.FC<MapProps> = ({ apiKey }) => {
 				map.destroy();
 			}
 		};
-	},);
+	});
 
-	return <div id="map-container" style={{height:'800px'}}></div>;
+	return <div id="map-container" style={{ height: '800px' }}></div>;
 };

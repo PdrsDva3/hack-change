@@ -1,0 +1,238 @@
+{
+	"openapi": "3.1.0",
+	"info": {
+		"title": "FastAPI",
+		"version": "0.1.0"
+	},
+	"paths": {
+		"/line/add_line": {
+			"post": {
+				"tags": ["line"],
+				"summary": "Add Line",
+				"operationId": "add_line_line_add_line_post",
+				"requestBody": {
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"$ref": "#/components/schemas/Body_add_line_line_add_line_post"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPValidationError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/line/all": {
+			"get": {
+				"tags": ["line"],
+				"summary": "Get All Lines",
+				"operationId": "get_all_lines_line_all_get",
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/dot/all": {
+			"get": {
+				"tags": ["dot"],
+				"summary": "Get All Dots H",
+				"operationId": "get_all_dots_h_dot_all_get",
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/meme/create": {
+			"post": {
+				"tags": ["meme"],
+				"summary": "Create Meme H",
+				"operationId": "create_meme_h_meme_create_post",
+				"requestBody": {
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"$ref": "#/components/schemas/Body_create_meme_h_meme_create_post"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HTTPValidationError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/meme/random": {
+			"get": {
+				"tags": ["meme"],
+				"summary": "Get Memes H",
+				"operationId": "get_memes_h_meme_random_get",
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/tax/see": {
+			"post": {
+				"tags": ["tax"],
+				"summary": "See",
+				"operationId": "see_tax_see_post",
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/tax/give": {
+			"post": {
+				"tags": ["tax"],
+				"summary": "See",
+				"operationId": "see_tax_give_post",
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"schemas": {
+			"Body_add_line_line_add_line_post": {
+				"properties": {
+					"file": {
+						"type": "string",
+						"format": "binary",
+						"title": "File"
+					}
+				},
+				"type": "object",
+				"required": ["file"],
+				"title": "Body_add_line_line_add_line_post"
+			},
+			"Body_create_meme_h_meme_create_post": {
+				"properties": {
+					"file": {
+						"type": "string",
+						"format": "binary",
+						"title": "File"
+					}
+				},
+				"type": "object",
+				"required": ["file"],
+				"title": "Body_create_meme_h_meme_create_post"
+			},
+			"HTTPValidationError": {
+				"properties": {
+					"detail": {
+						"items": {
+							"$ref": "#/components/schemas/ValidationError"
+						},
+						"type": "array",
+						"title": "Detail"
+					}
+				},
+				"type": "object",
+				"title": "HTTPValidationError"
+			},
+			"ValidationError": {
+				"properties": {
+					"loc": {
+						"items": {
+							"anyOf": [
+								{
+									"type": "string"
+								},
+								{
+									"type": "integer"
+								}
+							]
+						},
+						"type": "array",
+						"title": "Location"
+					},
+					"msg": {
+						"type": "string",
+						"title": "Message"
+					},
+					"type": {
+						"type": "string",
+						"title": "Error Type"
+					}
+				},
+				"type": "object",
+				"required": ["loc", "msg", "type"],
+				"title": "ValidationError"
+			}
+		}
+	}
+}
