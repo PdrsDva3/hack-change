@@ -9,6 +9,12 @@
 
 В итоге, данный проект позволяет пользователям легко и удобно заказывать речной транспорт, оптимизируя свои поездки по городу и экономя время и усилия.
 
+##Скринкаст прототипа приложения
+Доступен по ссылке
+https://drive.google.com/drive/folders/1G6_HuWNhtTPU91xwarePdzcUdm1dI0w0?usp=sharing
+Ссылка на фигму
+https://www.figma.com/design/axxKrpeOWgUMBunE9Rve3v/change%26hack?node-id=0-1&t=GBb4iTgoEgwgcXsT-1
+
 ## Технологический стек
 
 **Frontend**:  
@@ -31,4 +37,22 @@
 ```bash
 git clone https://github.com/your-repo-name.git
 cd your-repo-name
+```
+###Скачивание зависимостей
+```bash
+cd backend
+pip install -r requirements.txt
+cd ..
+cd frontend
+npm i
+```
+
+###Запуск
+
+```bash
+cd backend
+python main.py
+cd ..
+cd frontend
+npm run dev
 ```
